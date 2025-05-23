@@ -1,3 +1,6 @@
+#ifndef BLE_H
+#define BLE_H
+
 #include <stdio.h>
 
 
@@ -16,3 +19,5 @@ void usart_send(unsigned char data);
 unsigned char usart_recv();
 
 int usart_putchar(char c, FILE *stream);
+
+#endif /* ble.h */

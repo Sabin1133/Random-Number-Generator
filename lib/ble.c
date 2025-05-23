@@ -1,6 +1,3 @@
-#include <avr/io.h>
-#include <stdio.h>
-
 #include "ble.h"
 
 
@@ -53,5 +50,12 @@ int usart_putchar(char c, FILE *stream)
 
 void usart_send_rand_number(int number)
 {
+    int i;
+    int size = 0;
+    struct pdu pdu;
 
+    init_pdu(&pdu);
+
+    for (i = 0; i < sizeof(struct pdu); ++i)
+        usart_send(((char *)&pdu)[i]);
 }

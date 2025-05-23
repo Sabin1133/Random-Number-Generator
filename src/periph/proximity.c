@@ -1,23 +1,22 @@
-#include <avr/io.h>
-#include <avr/io2323.h>
+#include "proximity.h"
 
-#define TRIGGER_PIN
+#define TRIGGER_PIN PA3
 
 
-void proximity_timer1_init()
+void proximity_timer1_init(void)
 {
     TIMSK = (1 << TOIE1);  // enable timer1 overflow interrupts
     TCCR1A = 0;		       // set all bit to zero normal operation
 }
 
 
-void proximity_pins_init()
+void proximity_pins_init(void)
 {
-    DDRA |= (1 << PA3);
+    DDRA |= (1 << TRIGGER_PIN);
 }
 
 
-int proximity_dist()
+int proximity_dist(void)
 {
     int timer_count;
     int count;
@@ -25,9 +24,9 @@ int proximity_dist()
 
     // give 10us trigger pulse on trigger pin to HC-SR04
     
-    PORTA |= (1 << PA3);
+    PORTA |= (1 << TRIGGER_PIN);
     _delay_us(10);
-    PORTA &= (~(1 << PA3));
+    PORTA &= (~(1 << TRIGGER_PIN));
 
     // calculate width of echo by input capture (ICP)
 

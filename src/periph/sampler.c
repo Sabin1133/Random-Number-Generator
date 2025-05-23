@@ -1,25 +1,32 @@
-#include <avr/io.h>
+#include "sampler.h"
 
 
 void sampler_adc_init(void)
 {
-    ADMUX = (1 << REFS0) | (1 << MUX0); // AVcc reference, ADC1 (PC1)
+    // AVcc reference, ADC1 (PC1)
+    ADMUX = (1 << REFS0) | (1 << MUX0);
     
-    ADCSRA = (1 << ADEN)  // Enable ADC
-           | (1 << ADATE) // Enable Auto Trigger
-           | (1 << ADIE)  // Enable ADC interrupt
-           | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // Prescaler 128
+    // enable ADC
+    // enable auto trigger
+    // enable ADC interrupt
+    // prescaler 128
+    ADCSRA = (1 << ADEN) | (1 << ADATE) | (1 << ADIE) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
 
-    ADCSRB = (1 << ADTS2) | (0 << ADTS1) | (0 << ADTS0); // ADTS = 100 → Timer1 Compare Match B
+    // timer1 compare match B
+    ADCSRB = (1 << ADTS2) | (0 << ADTS1) | (0 << ADTS0);
 
-    ADCSRA |= (1 << ADSC); // Start first conversion
+    // start first conversion
+    ADCSRA |= (1 << ADSC);
 }
-
 
 void sampler_timer2_init(void)
 {
-    TCCR2A = 0; // Normal port operation
-    TCCR2B = (1 << WGM12) | (1 << CS12); // CTC mode (OCR1A), prescaler = 256
+    // normal mode
+    TCCR2A = 0;
 
-    OCR2B = 62500; // Compare Match B value (approx 1s for 16MHz / 256)
+    // CTC mode (OCR1A), prescaler = 256
+    TCCR2B = (1 << WGM12) | (1 << CS12);
+
+    // compare match B value (~1s for 16MHz / 256)
+    OCR2B = 62500;
 }
